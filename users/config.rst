@@ -50,7 +50,7 @@ The following shows the default configuration file:
 .. code-block:: xml
 
     <configuration version="12">
-        <folder id="default" path="/Users/jb/Sync/" ro="false" rescanIntervalS="60" ignorePerms="false" autoNormalize="true">
+        <folder id="default" path="/Users/jb/Sync/" type="readwrite" rescanIntervalS="60" ignorePerms="false" autoNormalize="true">
             <device id="3LT2GA5-CQI4XJM-WTZ264P-MLOGMHL-MCRLDNT-MZV4RD3-KA745CL-OGAERQZ"></device>
             <minDiskFreePct>1</minDiskFreePct>
             <versioning></versioning>
@@ -122,7 +122,7 @@ Folder Element
 
 .. code-block:: xml
 
-    <folder id="default" path="/Users/jb/Sync/" ro="false" rescanIntervalS="60" ignorePerms="false" autoNormalize="true">
+    <folder id="default" label="Default Sync Folder" path="/Users/jb/Sync/" type="readwrite" rescanIntervalS="60" ignorePerms="false" autoNormalize="true">
         <device id="3LT2GA5-CQI4XJM-WTZ264P-MLOGMHL-MCRLDNT-MZV4RD3-KA745CL-OGAERQZ"></device>
         <minDiskFreePct>1</minDiskFreePct>
         <versioning></versioning>
@@ -142,15 +142,30 @@ describes one folder. The following attributes may be set on the ``folder``
 element:
 
 id
-    The folder ID, must be unique. (mandatory)
+    The folder ID, must be unique and the same on every device sharing this folder. (mandatory)
+    
+    An auto generated ID is suggested on folder creation to reduce conflicts
+    with folders created on other devices.
+
+label
+    A friendly name for the the folder. (optional)
+    
+    Doesn't have to be unique (but should be for identification in GUI)
+    and can be different on each device sharing this folder.
 
 path
     The path to the directory where the folder is stored on this
     device; not sent to other devices. (mandatory)
 
-ro
-    True if the folder is read only (Master mode; will not be modified by
-    Syncthing) on this device.
+type
+    Type of the folder. Possible values: readwrite, readonly
+    
+    readwrite (default)
+        Folder will be synced in both directions.
+    
+    readonly
+        The folder is read only (Master mode; will not be modified by
+        Syncthing) on this device.
 
 rescanIntervalS
     The rescan interval, in seconds. Can be set to zero to disable when external
